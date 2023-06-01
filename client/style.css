@@ -1,0 +1,21 @@
+body {
+    font-family: Arial, sans-serif;
+  }
+  
+  .dashboard-container {
+    display: flex;
+  }
+  
+  .destination-input {
+    flex: 1;
+  }
+  
+  .destination-list {
+    flex: 1;
+    margin-left: 20px;
+  }
+  
+  .destination-list-item {
+    margin-bottom: 20px;
+  }
+  

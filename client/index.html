@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Single Page Application</title>
+  <!-- <link rel="stylesheet" href="style.css"> -->
+  <script src="script.js" type="module"></script>
+</head>
+<body>
+  <div id="user-dashboard" style="display: none;">
+    <h2>Welcome, <span id="name"></span>!</h2>
+    <button onclick="login()">Login</button>
+    <div class="dashboard-container">
+      <div class="destination-input">
+        <input id="city-input" type="text" placeholder="City name">
+        <button onclick="addCity()">Add</button>
+        <button onclick="deleteCity()">Delete</button>
+      </div>
+      <div class="destination-list" id="destination-list">
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>
