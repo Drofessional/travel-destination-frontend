@@ -1,21 +1,19 @@
 body {
     font-family: Arial, sans-serif;
-  }
-  
-  .dashboard-container {
-    display: flex;
-  }
-  
-  .destination-input {
-    flex: 1;
-  }
-  
-  .destination-list {
-    flex: 1;
-    margin-left: 20px;
-  }
-  
-  .destination-list-item {
-    margin-bottom: 20px;
-  }
-  
+}
+
+#register, #login {
+    margin-bottom: 2em;
+}
+
+input[type="text"], input[type="email"], input[type="password"] {
+    display: block;
+    margin-bottom: 1em;
+}
+
+button {
+    padding: 0.5em 1em;
+    color: white;
+    background-color: blue;
+    border: none;
+}
