@@ -1,5 +1,31 @@
 const API_URL = 'http://localhost:3000'; // Replace with your server's URL
+let user
 
+async function fetchAndDisplayDestinations() {
+    const destinationsResponse = await fetch(`${API_URL}/destinations/${user}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  
+    if (destinationsResponse.ok) {
+      const destinations = await destinationsResponse.json();
+  
+      // Clear existing destinations
+      const destinationList = document.getElementById('destination-list');
+      destinationList.innerHTML = '';
+  
+      // Add new destinations
+      destinations.forEach(destination => {
+        const li = document.createElement('li');
+        li.textContent = destination;
+        destinationList.appendChild(li);
+      });
+    }
+  }
+  
 document.getElementById('register-btn').addEventListener('click', async () => {
   const name = document.getElementById('register-name').value;
   const email = document.getElementById('register-email').value;
@@ -43,6 +69,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     console.log('data this should be the token ', data.token)
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', payload.name);
+    user = payload.name
     alert('Logged in successfully');
 
     // Hide register, login, and update information elements
@@ -53,6 +80,7 @@ document.getElementById('login-btn').addEventListener('click', async () => {
     // Show city and destination elements
     document.getElementById('city-div').style.display = 'block';
     document.getElementById('destination-div').style.display = 'block';
+    fetchAndDisplayDestinations();
   } else {
     alert('Error in login');
   }
@@ -137,6 +165,7 @@ document.getElementById('add-city-btn').addEventListener('click', async () => {
     if (response.ok) {
       const data = await response.json();
       alert('City added successfully');
+      fetchAndDisplayDestinations();
       // Here, you can also update the user's list of destinations in the UI
     } else {
       alert('Error adding city');
@@ -159,6 +188,7 @@ document.getElementById('delete-city-btn').addEventListener('click', async () =>
   if (response.ok) {
     alert('City deleted successfully');
     // You may want to update the destination list here
+    fetchAndDisplayDestinations();
   } else {
     alert('Error deleting city');
   }
