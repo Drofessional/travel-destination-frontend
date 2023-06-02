@@ -1,82 +1,99 @@
-const apiBaseUrl = 'http://localhost:3000';
+const API_URL = 'http://localhost:3000'; // Replace with your server's URL
 
-document.getElementById('register-btn').addEventListener('click', function() {
-    let name = document.getElementById('register-name').value;
-    let email = document.getElementById('register-email').value;
-    let password = document.getElementById('register-password').value;
+document.getElementById('register-btn').addEventListener('click', async () => {
+  const name = document.getElementById('register-name').value;
+  const email = document.getElementById('register-email').value;
+  const password = document.getElementById('register-password').value;
 
-    let data = {
-        name: name,
-        email: email,
-        password: password
-    };
+  const response = await fetch(`${API_URL}/users/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name, email, password })
+  });
 
-    fetch(apiBaseUrl + '/users/register', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+  if (response.ok) {
+    alert('Registered successfully');
+  } else {
+    alert('Error in registration');
+  }
 });
 
-document.getElementById('login-btn').addEventListener('click', function() {
-    let email = document.getElementById('login-email').value;
-    let password = document.getElementById('login-password').value;
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
 
-    let data = {
-        email: email,
-        password: password
-    };
+  const response = await fetch(`${API_URL}/users/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  });
 
-    fetch(apiBaseUrl + '/users/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        if (data.success) {
-            // Login successful, do something
-        } else {
-            // Login failed, show error message
-        }
-    })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+  if (response.ok) {
+    const data = await response.json();
+    localStorage.setItem('token', data.token);
+    alert('Logged in successfully');
+  } else {
+    alert('Error in login');
+  }
 });
 
-['name', 'email', 'password'].forEach(field => {
-    document.getElementById(`update-${field}-btn`).addEventListener('click', function() {
-        let value = document.getElementById(`update-${field}`).value;
+document.getElementById('update-name-btn').addEventListener('click', async () => {
+  const name = document.getElementById('update-name').value;
 
-        let data = {
-            [field]: value
-        };
+  const response = await fetch(`${API_URL}/users/updateName`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify({ newName: name })
+  });
 
-        fetch(apiBaseUrl + `/users/update`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-    });
+  if (response.ok) {
+    alert('Name updated successfully');
+  } else {
+    alert('Error updating name');
+  }
+});
+
+document.getElementById('update-email-btn').addEventListener('click', async () => {
+  const email = document.getElementById('update-email').value;
+
+  const response = await fetch(`${API_URL}/users/updateEmail`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify({ newEmail: email })
+  });
+
+  if (response.ok) {
+    alert('Email updated successfully');
+  } else {
+    alert('Error updating email');
+  }
+});
+
+document.getElementById('update-password-btn').addEventListener('click', async () => {
+  const password = document.getElementById('update-password').value;
+
+  const response = await fetch(`${API_URL}/users/updatePassword`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify({ newPassword: password })
+  });
+
+  if (response.ok) {
+    alert('Password updated successfully');
+  } else {
+    alert('Error updating password');
+  }
 });
