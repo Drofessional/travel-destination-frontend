@@ -24,6 +24,9 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
 
+  console.log('email  ', email)
+  console.log('password  ', password)
+
   const response = await fetch(`${API_URL}/users/login`, {
     method: 'POST',
     headers: {
@@ -34,8 +37,12 @@ document.getElementById('login-btn').addEventListener('click', async () => {
 
   if (response.ok) {
     const data = await response.json();
+    const payload = await JSON.parse(atob(data.token.split('.')[1]));
+    console.log('payload we need to get our user credentials from    ', payload)
+    console.log('data this should be the token ', data)
+    console.log('data this should be the token ', data.token)
     localStorage.setItem('token', data.token);
-    localStorage.setItem('user', data.user);
+    localStorage.setItem('user', payload.name);
     alert('Logged in successfully');
 
     // Hide register, login, and update information elements
