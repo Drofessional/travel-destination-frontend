@@ -35,7 +35,17 @@ document.getElementById('login-btn').addEventListener('click', async () => {
   if (response.ok) {
     const data = await response.json();
     localStorage.setItem('token', data.token);
+    localStorage.setItem('user', data.user);
     alert('Logged in successfully');
+
+    // Hide register, login, and update information elements
+    document.getElementById('register').style.display = 'none';
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('update').style.display = 'none';
+
+    // Show city and destination elements
+    document.getElementById('city-div').style.display = 'block';
+    document.getElementById('destination-div').style.display = 'block';
   } else {
     alert('Error in login');
   }
@@ -54,6 +64,7 @@ document.getElementById('update-name-btn').addEventListener('click', async () =>
   });
 
   if (response.ok) {
+    localStorage.setItem('user', name);
     alert('Name updated successfully');
   } else {
     alert('Error updating name');
@@ -95,5 +106,53 @@ document.getElementById('update-password-btn').addEventListener('click', async (
     alert('Password updated successfully');
   } else {
     alert('Error updating password');
+  }
+});
+
+document.getElementById('add-city-btn').addEventListener('click', async () => {
+    const cityName = document.getElementById('city-name').value;
+  // const countryName = document.getElementById('country-name').value;
+    // const lon = document.getElementById('longitude').value;
+    // const lat = document.getElementById('latitude').value;
+  
+    const response = await fetch(`${API_URL}/destinations/${localStorage.getItem('user')}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify({
+        city: cityName
+        // Add any other necessary data here
+      })
+    });
+  
+    if (response.ok) {
+      const data = await response.json();
+      alert('City added successfully');
+      // Here, you can also update the user's list of destinations in the UI
+    } else {
+      alert('Error adding city');
+    }
+  });
+  
+
+document.getElementById('delete-city-btn').addEventListener('click', async () => {
+  const cityName = document.getElementById('city-name').value;
+
+  const response = await fetch(`${API_URL}/users/deleteCity`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    },
+    body: JSON.stringify({ cityName })
+  });
+
+  if (response.ok) {
+    alert('City deleted successfully');
+    // You may want to update the destination list here
+  } else {
+    alert('Error deleting city');
   }
 });

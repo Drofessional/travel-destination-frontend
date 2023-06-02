@@ -17,3 +17,8 @@ button {
     background-color: blue;
     border: none;
 }
+
+#city-div, #destination-div {
+    width: 50%;
+    float: left;
+}
