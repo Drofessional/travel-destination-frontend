@@ -1,30 +1,56 @@
 const API_URL = 'http://localhost:3000'; // Replace with your server's URL
 let user
+let id
+let destinationIds
+let state = {}
+//Createa an object
 
 async function fetchAndDisplayDestinations() {
-    const destinationsResponse = await fetch(`${API_URL}/destinations/${user}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    });
-  
-    if (destinationsResponse.ok) {
-      const destinations = await destinationsResponse.json();
-  
-      // Clear existing destinations
-      const destinationList = document.getElementById('destination-list');
-      destinationList.innerHTML = '';
-  
-      // Add new destinations
-      destinations.forEach(destination => {
-        const li = document.createElement('li');
-        li.textContent = destination;
-        destinationList.appendChild(li);
+  const destinationsResponse = await fetch(`${API_URL}/destinations/${user}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+
+  if (destinationsResponse.ok) {
+    destinationIds = await destinationsResponse.json();
+
+    // Clear existing destinations
+    const destinationList = document.getElementById('destination-list');
+    destinationList.innerHTML = '';
+
+    // Add new destinations
+    for (const id of destinationIds) {
+      const destinationResponse = await fetch(`${API_URL}/destinations/id/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
       });
+
+      if (destinationResponse.ok) {
+        const destination = await destinationResponse.json();
+        const li = document.createElement('li');
+        li.textContent = destination.city;
+        //Add country to state
+        state[destination.city] = id
+        // Set the destination ID as a data attribute on the li element
+        li.dataset.destinationId = id;
+
+        // When the li is clicked, set the id variable
+        li.addEventListener('click', () => {
+          id = li.dataset.destinationId;
+        });
+
+        destinationList.appendChild(li);
+      }
     }
   }
+  console.log(state)
+}
   
 document.getElementById('register-btn').addEventListener('click', async () => {
   const name = document.getElementById('register-name').value;
@@ -150,7 +176,7 @@ document.getElementById('add-city-btn').addEventListener('click', async () => {
     // const lon = document.getElementById('longitude').value;
     // const lat = document.getElementById('latitude').value;
   
-    const response = await fetch(`${API_URL}/destinations/${localStorage.getItem('user')}`, {
+    const response = await fetch(`${API_URL}/destinations/${user}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -173,23 +199,21 @@ document.getElementById('add-city-btn').addEventListener('click', async () => {
   });
   
 
-document.getElementById('delete-city-btn').addEventListener('click', async () => {
-  const cityName = document.getElementById('city-name').value;
-
-  const response = await fetch(`${API_URL}/users/deleteCity`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('token')}`
-    },
-    body: JSON.stringify({ cityName })
+  document.getElementById('delete-city-btn').addEventListener('click', async () => {
+    console.log(state)
+    const cityName = document.getElementById('city-name').value
+    const response = await fetch(`${API_URL}/destinations/${state[cityName]}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+  
+    if (response.ok) {
+      alert('City deleted successfully');
+      fetchAndDisplayDestinations();
+    } else {
+      alert('Error deleting city');
+    }
   });
-
-  if (response.ok) {
-    alert('City deleted successfully');
-    // You may want to update the destination list here
-    fetchAndDisplayDestinations();
-  } else {
-    alert('Error deleting city');
-  }
-});
