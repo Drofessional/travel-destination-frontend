@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://https://destination-project-backend.herokuapp.com';
 let user;
 let id;
 let destinationIds;
