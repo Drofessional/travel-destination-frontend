@@ -55,7 +55,7 @@ Method: PUT
 Description: Update the password of a user.
 Controller Method: updatePassword
 
-☐Get User
+☐ Get User
 URL: /users/:name
 Method: GET
 Description: Get user information by name.
@@ -125,19 +125,23 @@ Controller Method: getDestinationDetails
 
 User Model:
 const UserSchema = new Schema({
+    
   name: { 
     type: String,
     required: true
   },
+
   email: {
     type: String,
     required: true,
     unique: true
   },
+
   password: {
     type: String,
     required: true
   },
+
   destinations: [{
     type: Schema.Types.ObjectId,
     ref: 'Destination',
@@ -147,22 +151,27 @@ const UserSchema = new Schema({
 
 Destination Model:
 const DestinationSchema = new Schema({
+
   city: {
     type: String,
     required: true
   },
+
   country: {
     type: String,
     required: false
   },
+
   lon: {
     type: Number,
     required: false
   },
+
   lat: {
     type: Number,
     required: false
   },
+
   attractions: [{
     type: String
   }]
