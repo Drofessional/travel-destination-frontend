@@ -202,7 +202,7 @@ document.getElementById('add-city-btn').addEventListener('click', async () => {
   document.getElementById('delete-city-btn').addEventListener('click', async () => {
     console.log(state)
     const cityName = document.getElementById('city-name').value
-    const response = await fetch(`${API_URL}/destinations/${state[cityName]}`, {
+    const response = await fetch(`${API_URL}/destinations/${user}/${state[cityName]}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
