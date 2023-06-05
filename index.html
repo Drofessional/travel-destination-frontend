@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Website</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="register">
+      <h2>Register</h2>
+      <input type="text" id="register-name" placeholder="Name" />
+      <input type="email" id="register-email" placeholder="Email" />
+      <input type="password" id="register-password" placeholder="Password" />
+      <button id="register-btn">Register</button>
+    </div>
+    <div id="login">
+      <h2>Login</h2>
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button id="login-btn">Login</button>
+    </div>
+    <div id="update">
+      <h2>Update User Information</h2>
+      <input type="text" id="update-name" placeholder="Name" />
+      <input type="password" id="update-password" placeholder="Password" />
+      <button id="update-password-btn">Update Password</button>
+    </div>
+
+    <div id="city-div" style="display: none">
+      <h2>Manage Cities</h2>
+      <input type="text" id="city-name" placeholder="City Name" />
+      <button id="add-city-btn">Add City</button>
+      <button id="delete-city-btn">Delete City</button>
+    </div>
+    <div id="destination-div" style="display: none">
+      <h2>Your Destinations</h2>
+      <ul id="destination-list"></ul>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
